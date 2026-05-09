@@ -3,16 +3,74 @@ package auth.service.member;
 
 import auth.dto.ResponseDto;
 import auth.dto.member.MemberLoginReqDto;
+import auth.dto.member.MemberLoginResDto;
+import auth.entity.Member;
 import auth.enums.ResponseCode;
+import auth.jwt.JwtProvider;
+import auth.repository.MemberRepository;
+import auth.service.RedisService;
+import auth.utill.CryptoUtil;
+import io.jsonwebtoken.security.Password;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.Duration;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class MemberLoginService {
 
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
+    private final RedisService redisService;
+
     public ResponseDto memberLogin(MemberLoginReqDto reqDto) {
-        return new ResponseDto(ResponseCode.SUCCESS);
+
+        String memberId = reqDto.getMemberId();
+
+        Member member = memberRepository.findByMemberId(memberId);
+
+        if (member == null) return new ResponseDto(ResponseCode.NOT_FOUND_MEMBER);
+
+        if (!passwordEncoder.matches(reqDto.getPassword(), member.getPassword())) return new ResponseDto(ResponseCode.PASSWORD_NOT_MATCH);
+
+        MemberLoginResDto resDto = createLoginResponse(member);
+
+        return new ResponseDto(ResponseCode.SUCCESS, resDto);
     }
+
+
+    private MemberLoginResDto createLoginResponse(Member member) {
+        String sessionToken = UUID.randomUUID().toString();
+
+        String accessToken = jwtProvider.generateAccessToken(
+                member.getMemberId(),
+                member.getMemberCode(),
+                sessionToken
+        );
+
+        String refreshToken = jwtProvider.generateRefreshToken(
+                member.getMemberId(),
+                member.getMemberCode(),
+                sessionToken
+        );
+
+        // 레디스에 refreshToken 저장
+        redisService.saveRefreshToken(
+                member.getMemberCode(),
+                refreshToken
+        );
+
+        return MemberLoginResDto.builder()
+                .memberCode(member.getMemberCode())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
 
 }

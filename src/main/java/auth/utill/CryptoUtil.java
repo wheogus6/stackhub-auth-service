@@ -14,7 +14,7 @@ import java.util.Base64;
 @UtilityClass
 public class CryptoUtil {
 
-    public Key getAESKey() {
+    private Key getAESKey() {
         String key = "wheogus6";
         byte[] keyBytes = new byte[16];
         byte[] b = key.getBytes(StandardCharsets.UTF_8);
