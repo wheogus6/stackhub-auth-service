@@ -28,11 +28,9 @@ public class MemberLoginService {
 
     public ResponseDto memberLogin(MemberLoginReqDto reqDto) {
 
-        String memberId = reqDto.getMemberId();
+        Member member = memberRepository.findByMemberId(reqDto.getMemberId());
 
-        Member member = memberRepository.findByMemberId(memberId);
-
-        if (member == null) return new ResponseDto(ResponseCode.NOT_FOUND_MEMBER);
+        if (member == null) return new ResponseDto(ResponseCode.NOT_EXIST_ID);
 
         if (!passwordEncoder.matches(reqDto.getPassword(), member.getPassword())) return new ResponseDto(ResponseCode.PASSWORD_NOT_MATCH);
 
