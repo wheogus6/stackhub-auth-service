@@ -17,7 +17,7 @@ public class JwtUtil {
     private final long accessTokenExpiration = 1000 * 60 * 60; // 1시간
     private final long refreshTokenExpiration = 1000 * 60 * 60 * 24 * 7; // 7일
 
-    public JwtUtil(@Value("${jwt.access.secret.key}") String secret) {
+    public JwtUtil(@Value("${jwt.secret-key}") String secret) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
