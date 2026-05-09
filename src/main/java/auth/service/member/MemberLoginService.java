@@ -9,19 +9,17 @@ import auth.enums.ResponseCode;
 import auth.jwt.JwtProvider;
 import auth.repository.MemberRepository;
 import auth.service.RedisService;
-import auth.utill.CryptoUtil;
-import io.jsonwebtoken.security.Password;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class MemberLoginService {
+
+    private final String USER_TYPE = "member";
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -61,6 +59,7 @@ public class MemberLoginService {
 
         // 레디스에 refreshToken 저장
         redisService.saveRefreshToken(
+                USER_TYPE,
                 member.getMemberCode(),
                 refreshToken
         );

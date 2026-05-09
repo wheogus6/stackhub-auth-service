@@ -14,18 +14,18 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "member")
-public class Member {
+@Table(name = "admin")
+public class Admin {
 
     @Id
-    @Column(name = "member_code")
-    private String memberCode;
+    @Column(name = "admin_code")
+    private String adminCode;
 
-    @Column(name = "member_id")
-    private String memberId;
+    @Column(name = "admin_id")
+    private String adminId;
 
-    @Column(name = "member_name")
-    private String memberName;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "password")
     private String password;

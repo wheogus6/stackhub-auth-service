@@ -12,27 +12,47 @@ public class RedisService {
 
     private final StringRedisTemplate redisTemplate;
 
-    public void saveRefreshToken(String userCode, String token) {
+    public void saveRefreshToken(
+            String userType,
+            String userCode,
+            String token
+    ) {
 
         redisTemplate.opsForValue()
                 .set(
-                        "auth:user:" + userCode + ":refresh",
+                        createRefreshTokenKey(userType, userCode),
                         token,
                         Duration.ofDays(7)
                 );
     }
 
-    public String getRefreshToken(String userCode) {
+    public String getRefreshToken(
+            String userType,
+            String userCode
+    ) {
 
         return redisTemplate.opsForValue()
-                .get("auth:user:" + userCode + ":refresh");
+                .get(
+                        createRefreshTokenKey(userType, userCode)
+                );
     }
 
-    public void deleteRefreshToken(String userCode) {
+    public void deleteRefreshToken(
+            String userType,
+            String userCode
+    ) {
 
         redisTemplate.delete(
-                "auth:user:" + userCode + ":refresh"
+                createRefreshTokenKey(userType, userCode)
         );
+    }
+
+    private String createRefreshTokenKey(
+            String userType,
+            String userCode
+    ) {
+
+        return "auth:" + userType + ":" + userCode + ":refresh";
     }
 
 }
