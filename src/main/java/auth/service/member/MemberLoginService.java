@@ -62,6 +62,10 @@ public class MemberLoginService {
                 refreshToken
         );
 
+//        member.setPassword(
+//                passwordEncoder.encode(reqDto.getPassword())
+//        );
+
         return MemberLoginResDto.builder()
                 .memberCode(member.getMemberCode())
                 .accessToken(accessToken)
