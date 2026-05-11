@@ -7,7 +7,7 @@ import auth.entity.Admin;
 import auth.enums.ResponseCode;
 import auth.jwt.JwtProvider;
 import auth.repository.AdminRepository;
-import auth.service.RedisService;
+import auth.service.common.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

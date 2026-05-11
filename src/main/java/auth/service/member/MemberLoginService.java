@@ -8,7 +8,7 @@ import auth.entity.Member;
 import auth.enums.ResponseCode;
 import auth.jwt.JwtProvider;
 import auth.repository.MemberRepository;
-import auth.service.RedisService;
+import auth.service.common.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,10 +61,6 @@ public class MemberLoginService {
                 member.getMemberCode(),
                 refreshToken
         );
-
-//        member.setPassword(
-//                passwordEncoder.encode(reqDto.getPassword())
-//        );
 
         return MemberLoginResDto.builder()
                 .memberCode(member.getMemberCode())

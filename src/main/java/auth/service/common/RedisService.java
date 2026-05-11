@@ -1,4 +1,4 @@
-package auth.service;
+package auth.service.common;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;

@@ -24,9 +24,11 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login/**").permitAll()
+                        .requestMatchers("/join/**").permitAll()
+                        .requestMatchers("/logout/**").permitAll()
+                        .requestMatchers("/reissue/**").permitAll()
                         .anyRequest().authenticated()
                 );
-
         return http.build();
     }
 
